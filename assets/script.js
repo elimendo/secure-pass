@@ -1,46 +1,47 @@
+function generatePassword() {
+    
+    var length = parseInt(prompt("Enter number between 8-128"));
 
-function generate(event) {
-    event.preventDefault()
-    const length = document.getElementById('length').value;
-    const numbers = document.getElementById('numbers').value;
-    const lowerCase = document.getElementById('lowercase').value;
-    const symbols = document.getElementById('symbols').value;
-    const upperCase = document.getElementById('uppercase').value;
-    console.log('numbers')
-   const password = generatePassword(parseInt(length), symbols, upperCase, lowerCase, numbers,)
+    
+    if (isNaN(length) || length < 8 || length > 128) {
+      alert("Put the right length in ugly mofo");
+      return;
+    }
 
-    document.getElementById('output').innerHTML = password
-};
+    var includeLowercase = confirm("Lowercase Characers?");
+    var includeUppercase = confirm("Uppercase characters?");
+    var includeNumeric = confirm("Numeric?");
+    var includeSpecial = confirm("Special Characters?");
 
+    
+    if (!includeLowercase && !includeUppercase && !includeNumeric && !includeSpecial) {
+      alert("Select one character type ugly mofo.");
+      return;
+    }
 
+    
+    var password = generateRandomPassword(length, includeLowercase, includeUppercase, includeNumeric, includeSpecial);
+   
+    alert(password);
+  }
 
+  function generateRandomPassword(length, includeLowercase, includeUppercase, includeNumeric, includeSpecial) {
+    var lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    var uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var numericChars = "0123456789";
+    var specialChars = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/";
 
-function generatePassword(length, symbols, upperCase, lowerCase, numbers,) {
-let characters = "";
+    var allChars = "";
+    if (includeLowercase) allChars += lowercaseChars;
+    if (includeUppercase) allChars += uppercaseChars;
+    if (includeNumeric) allChars += numericChars;
+    if (includeSpecial) allChars += specialChars;
 
+    var password = "";
+    for (var i = 0; i < length; i++) {
+      var randomIndex = Math.floor(Math.random() * allChars.length);
+      password += allChars.charAt(randomIndex);
+    }
 
-if (numbers) {
-    characters +="0123456789"
-}
-
-if (lowerCase) {
-    characters +="abcdefghijklmnopqrstuvwxyz"
-}
-
-if (upperCase) {
-    characters +="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-}
-
-if (symbols) {
-    characters +="!@#$%&*()+?>"
-}
-
-let passwordArray = [];
-
-while(passwordArray.length < length){
-    const character = characters[Math.floor(Math.random() * characters.length)];
-
-    passwordArray.push(character)
-}
-return passwordArray.join('');
-}
+    return password;
+  }
